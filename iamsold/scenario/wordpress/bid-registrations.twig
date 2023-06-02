@@ -1,0 +1,7 @@
+{% for bid in properties.results %}
+    <div class="l__col l__col__span4 l__bottom" data-1024="12" data-anim__delay="{{ loop.index }}" data-anim="fadeslideup" data-anim__scroll="false" data-anim__animate="animate">
+        <div class="l__col__evenpad l__gridmaintain">
+            {% include 'account/partials/tease-bid-application.twig' %}
+        </div>
+    </div>
+{% endfor %}

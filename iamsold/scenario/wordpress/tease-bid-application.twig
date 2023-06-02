@@ -1,0 +1,42 @@
+<div class="a__tease a__tease--bid c__bidApplication">
+    <div class="c__bidApplication__content a__tease__content">
+        <div class="c__bidApplication__status a__teaseStatus a__teaseStatus--{{ bid.additional_data.status }}">{{ bid.additional_data.status == 'rejected' ? __('Unsuccessful','mw-theme') : bid.additional_data.status|replace('_', ' ')|title }}</div>
+
+        {% if bid.additional_data.status == 'incomplete' %}
+            <a href="#delete-registation" data-delete-registation="{{ bid.additional_data.bid_registration_id }}" data-lity>
+                <span class="sr-only">{{ __('Delete registation', 'mw-theme') }}</span>
+                <svg><use xlink:href="#bin-icon"></use></svg>
+            </a>
+        {% endif %}
+
+        <h2>{{ bid.property_card_title }}</h2>
+        <address>{{ bid.address.thoroughfare ? bid.address.thoroughfare ~ ', ' }}
+            {{ bid.address.post_town ? '<span class="capital-case">' ~ bid.address.post_town ~ '</span>, ' }}
+            {{ bid.address.county ? bid.address.county ~ ', ' }}
+            {{ bid.address.post_code }}</address>
+
+        {% if property.additional_data.current_bid %}
+            <p class="current-bid">{{__('Current bid: ', 'mw-theme') ~ global.currency_symbol }}{{ bid.auction_data.current_price|number_format(0, '.', ',') }}</p>
+        {% else %}
+            <p class="current-bid">{{__('Starting Bid: ', 'mw-theme') ~ global.currency_symbol }}{{ bid.auction_data.start_price|number_format(0, '.', ',') }}</p>
+        {% endif %}
+
+        <div class="a__tease__actions">
+            {% if bid.additional_data.status in ['in_progress', 'incomplete'] %}
+                <a href="{{ fn('add_query_arg', 'property', bid.ias_id, '/bid-registration/details/') }}" class="btn btn--standard">{{ __('Continue registration', 'mw-theme') }}</a>
+            {% elseif bid.additional_data.status == 'approved' and bid.status in ['sale'] %}
+                <a href="/property/{{ bid.ias_id }}/" class="btn btn--standard">{{ __('Bid to purchase', 'mw-theme') }}</a>
+            {% endif %}
+
+            {% if bid.status != 'preapproved' and bid.status != 'unsold' %}
+                <a href="/property/{{ bid.ias_id }}/" class="btn btn--trans">{{ __('View property', 'mw-theme') }}</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="c__bidApplication__progress a__tease__progress">
+        <span class="percent">{{ __(bid.additional_data.completion_percentage ~ '% complete', 'mw-theme') }}</span>
+        <div class="progress-wrap progress" data-progress-percent="{{ bid.additional_data.completion_percentage }}">
+            <div class="progress-bar progress"></div>
+        </div>
+    </div>
+</div>
